@@ -37,14 +37,14 @@ async def exterminate_command_handler(message: Message) -> None:
 @router.inline_query()
 async def inline_query_handler(inline_query: InlineQuery) -> None:
     query = inline_query.query.split()
-    results = []
-    if len(query) == 0:
-        results.append(InlineQueryResultVoice(
+    results = [
+        InlineQueryResultVoice(
             id='exterminate',
             title='УНИЧТОЖИТЬ!',
             voice_url='https://media.githubusercontent.com/media/Leaf621/dalek_bot/refs/heads/main/data/exterminate.ogg',
             description='Крик далека',
-        ))
+        )
+    ]
     if len(query) == 1 and query[0].lower() == 'uwu':
         results.append(InlineQueryResultVoice(
             id='exterminate_uwu',
