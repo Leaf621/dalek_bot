@@ -12,7 +12,7 @@ from captcha.image import ImageCaptcha
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
-from aiogram.enums import ParseMode
+from aiogram.enums import ParseMode, ChatMemberStatus
 from aiogram.filters import Filter
 from aiogram.types import Message, ChatMemberUpdated, User
 from aiogram.types.input_file import BufferedInputFile
@@ -71,9 +71,14 @@ async def send_antibot_message(user: User, message: Union[Message, ChatMemberUpd
 
 @dp.chat_member()
 async def chat_member_update_handler(update: ChatMemberUpdated) -> None:
-    if update.new_chat_member.status != 'member':
+    if update.new_chat_member.status != ChatMemberStatus.MEMBER:
         return
-    await send_antibot_message(update.from_user, update)
+    from_member = await bot.get_chat_member(chat_id=update.chat.id, user_id=update.from_user.id)
+    if from_member.status in (ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.CREATOR):
+        return
+    if update.new_chat_member.user.is_bot:
+        return
+    await send_antibot_message(update.new_chat_member.user, update)
 
 @dp.message(IsCheckingFilter(antibot_users))
 async def message_handler(message: Message) -> None:
