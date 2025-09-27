@@ -13,6 +13,7 @@ from aiogram.types import Message
 from aiogram.utils.formatting import Text, TextLink
 
 from antibot import router as antibot_router
+from fun import router as fun_router
 
 # Load .env file and get BOT_TOKEN variable
 load_dotenv()
@@ -23,6 +24,7 @@ bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 dp = Dispatcher()
 
 dp.include_router(antibot_router)
+dp.include_router(fun_router)
 
 @dp.message(CommandStart())
 async def start_command_handler(message: Message) -> None:
