@@ -1,24 +1,10 @@
 import asyncio
 import logging
 import sys
-from os import getenv
 
-from dotenv import load_dotenv
 from uvicorn import Config, Server
 
-from bot import bot, dispatcher, app
-
-# Register routers
-# FastAPI routers
-from routes.v1 import router as v1_router
-# Aiogram routers
-from antibot import router as antibot_router
-from fun import router as fun_router
-
-dispatcher.include_router(antibot_router)
-dispatcher.include_router(fun_router)
-
-app.include_router(v1_router)
+from bot import bot, app, dispatcher
 
 async def run_app() -> None:
     config = Config(app=app, host="0.0.0.0", port=8000)
