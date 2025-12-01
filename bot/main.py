@@ -4,7 +4,7 @@ import sys
 
 from uvicorn import Config, Server
 
-from bot import bot, app, dispatcher
+from dalekbot import bot, app, dispatcher
 
 async def run_app() -> None:
     config = Config(app=app, host="0.0.0.0", port=8000)
