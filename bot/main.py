@@ -7,7 +7,7 @@ from uvicorn import Config, Server
 from dalekbot import bot, app, dispatcher
 
 async def run_app() -> None:
-    config = Config(app=app, host="0.0.0.0", port=8000)
+    config = Config(app=app, host="0.0.0.0", port=3000)
     server = Server(config=config)
     await server.serve()
 

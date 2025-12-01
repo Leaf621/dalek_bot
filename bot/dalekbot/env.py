@@ -14,6 +14,7 @@ from fastapi import FastAPI
 # Load .env file and get BOT_TOKEN variable
 load_dotenv()
 TOKEN = getenv("BOT_TOKEN")
+BASE_URL = getenv("BASE_URL")
 
 # All handlers should be attached to the Router (or Dispatcher)
 bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))

@@ -1,4 +1,4 @@
-import { Box, Typography, type Theme } from "@mui/material";
+import { Box, type Theme } from "@mui/material";
 import { useEffect, useState, type ReactNode } from "react";
 
 function Telegram({theme, children}: {theme: Theme, children?: ReactNode}) {
@@ -29,11 +29,22 @@ function Telegram({theme, children}: {theme: Theme, children?: ReactNode}) {
             window.Telegram.WebApp.offEvent('viewportChanged', onResize);
         };
     }, [theme]);
+
     return (
         <Box sx={{height: viewportHeight + 'px', boxSizing: 'border-box', overflow: 'auto'}}>
             {children}
         </Box>
     );
+}
+
+export function useUserId() {
+    // @ts-ignore
+    return window.Telegram.WebApp.initDataUnsafe.user.id;
+}
+
+export function sharePreparedMessage(message_id: string) {
+    // @ts-ignore
+    window.Telegram.WebApp.shareMessage(message_id);
 }
 
 export default Telegram;
