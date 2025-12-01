@@ -18,6 +18,7 @@ from aiogram.types import (
 )
 from aiogram.types.inline_keyboard_button import InlineKeyboardButton
 from aiogram.types.input_file import FSInputFile
+from aiogram.types.web_app_info import WebAppInfo
 from aiogram.utils.formatting import Bold, Text, TextMention
 
 from captcha.image import ImageCaptcha
@@ -34,22 +35,9 @@ async def exterminate_command_handler(message: Message) -> None:
     else:
         await message.reply_voice(FSInputFile('data/exterminate.ogg'))
 
-@router.inline_query()
-async def inline_query_handler(inline_query: InlineQuery) -> None:
-    query = inline_query.query.split()
-    results = [
-        InlineQueryResultVoice(
-            id='exterminate',
-            title='УНИЧТОЖИТЬ!',
-            voice_url='https://media.githubusercontent.com/media/Leaf621/dalek_bot/refs/heads/main/data/exterminate.ogg',
-            description='Крик далека',
-        )
-    ]
-    if len(query) == 1 and query[0].lower() == 'uwu':
-        results.append(InlineQueryResultVoice(
-            id='exterminate_uwu',
-            title='УНИЧТОЖИТЬ! (uwu mode)',
-            voice_url='https://media.githubusercontent.com/media/Leaf621/dalek_bot/refs/heads/main/data/uwu.ogg',
-            description='Крик далека в режиме uwu',
-        ))
-    await inline_query.answer(results=results, cache_time=1, is_personal=True)
+@router.message(Command('sounds'))
+async def sounds_command_handler(message: Message) -> None:
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Open', url='https://t.me/dalek_fn_devbot/sounds')],
+    ])
+    await message.answer("Choose a sound to play:", reply_markup=keyboard)
