@@ -43,5 +43,4 @@ async def sounds_command_handler(message: Message) -> None:
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='Открыть', url=f'https://t.me/{me.username}?startapp')],
     ])
-    print(keyboard)
     await message.answer("Попробуйте наше новое приложение", reply_markup=keyboard)

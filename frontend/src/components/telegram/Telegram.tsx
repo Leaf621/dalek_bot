@@ -42,9 +42,14 @@ export function useUserId() {
     return window.Telegram.WebApp.initDataUnsafe.user.id;
 }
 
-export function sharePreparedMessage(message_id: string) {
+export function sharePreparedMessage(message_id: string, callback: ((nice: boolean) => void) | null = null) {
     // @ts-ignore
-    window.Telegram.WebApp.shareMessage(message_id);
+    window.Telegram.WebApp.shareMessage(message_id, callback);
+}
+
+export function closeWebApp() {
+    // @ts-ignore
+    window.Telegram.WebApp.close();
 }
 
 export default Telegram;
