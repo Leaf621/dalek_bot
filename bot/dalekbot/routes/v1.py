@@ -1,4 +1,7 @@
 from random import choice
+import hmac
+import hashlib
+from urllib.parse import parse_qsl
 
 from fastapi import APIRouter
 from fastapi.responses import FileResponse, JSONResponse
@@ -82,3 +85,15 @@ async def share_sound(request: SoundShareRequest) -> SoundShareResponse:
     )
     return SoundShareResponse(success=True, message_id=prepared_message.id)
 
+class TelegramAuthRequest(BaseModel):
+    init_data: str
+
+@router.post("/auth/telegram")
+async def telegram_auth(request: TelegramAuthRequest):
+    params = dict(parse_qsl(request.init_data))
+    check_string = '\n'.join(f"{k}={v}" for k, v in sorted(params.items()) if k != 'hash')
+    secret_key = hmac.new(b'WebAppData', bot.token.encode(), hashlib.sha256).digest()
+    computed_hash = hmac.new(secret_key, check_string.encode(), hashlib.sha256).hexdigest()
+    if computed_hash != params.get('hash'):
+        return JSONResponse(status_code=403, content={"detail": "Invalid data"})
+    return {"status": "ok"}

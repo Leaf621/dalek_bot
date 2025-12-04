@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Box, Button, Container, Typography, Paper, Slider, Stack, Skeleton } from '@mui/material'
 import { ENDPOINT, getSounds, requestShareSound, type Sound } from './backend/api'
-import { closeWebApp, sharePreparedMessage, useUserId } from './components/telegram/Telegram';
+import { closeWebApp, sharePreparedMessage, useTelegramContext } from './components/telegram/Telegram';
 import { PlayArrow, Share, VolumeDown, VolumeUp } from '@mui/icons-material';
+import ProfileNav from './components/ProfileNav';
 
 function Sound(props: {sound: Sound, volume: number}) {
-  const userId = useUserId();
+  const telegramContext = useTelegramContext();
 
   const audio = useRef<HTMLAudioElement>(null);
 
@@ -23,7 +24,7 @@ function Sound(props: {sound: Sound, volume: number}) {
   }, [props.volume]);
 
   async function shareSound() {
-    let result = await requestShareSound({user_id: userId, identifier: props.sound.identifier});
+    let result = await requestShareSound({user_id: telegramContext.userId, identifier: props.sound.identifier});
     sharePreparedMessage(result.message_id, (nice) => {
       if (nice) {
         closeWebApp();
@@ -76,7 +77,7 @@ function Sounds() {
   }, []);
 
   return (
-    <>
+    <Box>
     <Stack spacing={2} direction="row" sx={{ alignItems: 'center', mb: 1 }}>
       <VolumeDown />
       <Slider aria-label="Volume" value={volume} onChange={(_, v) => setVolume(v)} />
@@ -86,17 +87,18 @@ function Sounds() {
       {sounds.map((sound) => (<Sound key={sound.identifier} sound={sound} volume={volume} />))}
       {loading && Array.from({length: 5}).map((_, idx) => (<SoundSkeleton key={idx} />))}
     </Stack>
-    </>
+    </Box>
   );
 }
 
 function App() {
   return (
-    <Container maxWidth="sm">
-      <Box>
+    <Stack>
+      <ProfileNav />
+      <Container maxWidth="sm">
         <Sounds />
-      </Box>
-    </Container>
+      </Container>
+    </Stack>
   )
 }
 

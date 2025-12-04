@@ -32,3 +32,19 @@ export async function requestShareSound(request: ShareRequest): Promise<ShareRes
     let data = await response.json();
     return data;
 }
+
+export type AuthenticateResponse = {
+    status: string;
+}
+
+export async function authenticateTelegram(initData: string): Promise<AuthenticateResponse> {
+    let response = await fetch(`${ENDPOINT}/auth/telegram`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({init_data: initData})
+    });
+    let data = await response.json();
+    return data;
+}
