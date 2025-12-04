@@ -24,5 +24,10 @@ SOUNDS = [
         identifier=new_identifier("dalekbot", "youcan"),
         file_path="data/sounds/youcan.ogg",
         description="Ты всё сможешь! Давай!",
+    ),
+    Sound(
+        identifier=new_identifier("dalekbot", "italked"),
+        file_path="data/sounds/italked.ogg",
+        description="Я же вам говорила!",
     )
 ]
