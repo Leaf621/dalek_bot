@@ -12,7 +12,7 @@ from aiogram.types.inline_keyboard_button import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from dalekbot.sounds import SOUNDS
-from dalekbot.env import bot
+from dalekbot.bot import bot
 from dalekbot.settings import settings
 
 from pydantic import BaseModel
