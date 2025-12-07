@@ -12,7 +12,8 @@ from aiogram.types.inline_keyboard_button import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from dalekbot.sounds import SOUNDS
-from dalekbot.env import bot, BASE_URL
+from dalekbot.env import bot
+from dalekbot.settings import settings
 
 from pydantic import BaseModel
 
@@ -61,7 +62,7 @@ def _create_sound_inline_query_result(sound: PublicSound, username: str) -> Inli
         ]])
     return InlineQueryResultAudio(
         id=sound.identifier,
-        audio_url=f"{BASE_URL}api/v1/sounds/{sound.identifier}/sound.ogg",
+        audio_url=f"{settings.BASE_URL}api/v1/sounds/{sound.identifier}/sound.ogg",
         title=sound.description,
         reply_markup=keyboard.as_markup() if keyboard else None,
     )

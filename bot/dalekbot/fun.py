@@ -1,29 +1,14 @@
-import asyncio
-import random
 from dataclasses import dataclass
-from typing import Union
 
 from aiogram import Router
-from aiogram.enums import ChatMemberStatus, ChatAction, ParseMode
+from aiogram.enums import ChatAction
 from aiogram.filters import Command
 from aiogram.types import (
-    ChatMemberUpdated,
     Message,
-    User,
-    InlineQuery,
-    InlineQueryResultVoice,
-    InputTextMessageContent,
-    ChosenInlineResult,
     InlineKeyboardMarkup
 )
 from aiogram.types.inline_keyboard_button import InlineKeyboardButton
 from aiogram.types.input_file import FSInputFile
-from aiogram.types.web_app_info import WebAppInfo
-from aiogram.utils.formatting import Bold, Text, TextMention
-
-from captcha.image import ImageCaptcha
-
-from dalekbot.env import BASE_URL
 
 
 router = Router()

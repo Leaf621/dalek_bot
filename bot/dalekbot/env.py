@@ -1,7 +1,5 @@
 from os import getenv
 
-from dotenv import load_dotenv
-
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -11,13 +9,10 @@ from aiogram.utils.formatting import Text, TextLink
 
 from fastapi import FastAPI
 
-# Load .env file and get BOT_TOKEN variable
-load_dotenv()
-TOKEN = getenv("BOT_TOKEN")
-BASE_URL = getenv("BASE_URL")
+from dalekbot.settings import settings
 
 # All handlers should be attached to the Router (or Dispatcher)
-bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+bot = Bot(token=settings.BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 dispatcher = Dispatcher()
 app = FastAPI()
 
