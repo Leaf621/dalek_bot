@@ -52,14 +52,12 @@ def get_sound(identifier: str):
     return FileResponse(sound.file_path, media_type="audio/ogg")
 
 def _create_sound_inline_query_result(sound: PublicSound, username: str) -> InlineQueryResultAudio:
-    keyboard = None
-    if choice([True, True, False]): # 2/3 chance to add
-        keyboard = InlineKeyboardBuilder([[
-            InlineKeyboardButton(
-                text="Попробуйте в приложении",
-                url=f'https://t.me/{username}?startapp'
-            )
-        ]])
+    keyboard = InlineKeyboardBuilder([[
+        InlineKeyboardButton(
+            text="Попробуйте в приложении",
+            url=f'https://t.me/{username}?startapp'
+        )
+    ]])
     return InlineQueryResultAudio(
         id=sound.identifier,
         audio_url=f"{settings.BASE_URL}api/v1/sounds/{sound.identifier}/sound.ogg",
