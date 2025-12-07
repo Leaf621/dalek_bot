@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Box, Button, Container, Typography, Paper, Slider, Stack, Skeleton } from '@mui/material'
+import { Box, Button, Container, Typography, Paper, Slider, Stack, Skeleton, CircularProgress } from '@mui/material'
 import { ENDPOINT, getSounds, requestShareSound, type Sound } from './backend/api'
 import { closeWebApp, sharePreparedMessage, useTelegramContext } from './components/telegram/Telegram';
 import { PlayArrow, Share, VolumeDown, VolumeUp } from '@mui/icons-material';
@@ -7,21 +7,32 @@ import ProfileNav from './components/ProfileNav';
 
 function Sound(props: {sound: Sound, volume: number}) {
   const telegramContext = useTelegramContext();
+  const [loading, setLoading] = useState(false);
+  const [playing, setPlaying] = useState(false);
 
-  const audio = useRef<HTMLAudioElement>(null);
-
-  useEffect(() => {
-    if (!audio.current) {
-      audio.current = new Audio(`${ENDPOINT}/sounds/${props.sound.identifier}/sound.ogg`);
-      audio.current.volume = props.volume / 100;
-    }
-  }, [props.sound.identifier]);
+  const audio = useRef<HTMLAudioElement>(new Audio());
 
   useEffect(() => {
-    if (audio.current) {
-      audio.current.volume = props.volume / 100;
-    }
+    audio.current.volume = props.volume / 100;
   }, [props.volume]);
+
+  audio.current.onloadstart = () => {
+    setLoading(true);
+  };
+
+  audio.current.oncanplaythrough = () => {
+    setLoading(false);
+    setPlaying(true);
+  };
+
+  audio.current.onended = () => {
+    setPlaying(false);
+  };
+
+  async function play() {
+    audio.current.src = `${ENDPOINT}/sounds/${props.sound.identifier}/sound.ogg`;
+    await audio.current.play();
+  }
 
   async function shareSound() {
     let result = await requestShareSound({user_id: telegramContext.userId, identifier: props.sound.identifier});
@@ -39,8 +50,8 @@ function Sound(props: {sound: Sound, volume: number}) {
           <Typography variant="body1">{props.sound.description}</Typography>
           <Typography variant="caption">ID: {props.sound.identifier}</Typography>
         </Box>
-        <Button variant="outlined" onClick={() => audio.current?.play()}>
-          <PlayArrow />
+        <Button variant="outlined" onClick={play} disabled={loading || playing}>
+          {!loading ? <PlayArrow /> : <CircularProgress size={24} />}
         </Button>
         <Button variant="outlined" onClick={shareSound}>
           <Share />
